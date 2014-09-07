@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{%block chart_loader_header %}
+{% load chartit %}
+{{ charts|load_charts:container }}
+
+<script>
+      $(function() {
+          $('#slider-id').codaSlider(
+          		{dynamicArrows:false}
+          	);
+      });
+</script>
+
+{% endblock %}
+    
+{%block main_content %}
+	{%block main_header %}Gráficos{%endblock%}
+	{%block sub_header %}Evolución y datos anuales{%endblock%}
+
+	{%block content_1 %}
+		<!-- Charts -->
+		<!--div class="g_12">
+			<div class="widget_header">
+				<h4 class="widget_header_title wwIcon i_16_charts">Charts</h4>
+			</div>
+			<div class="widget_contents"-->
+
+			<div class="coda-slider" id="slider-id">
+            {% for a in years%}
+          		<div>
+              		<h2 class="title"><span class="tab_label">{{a}}</span></h2> 
+              		<div id='{{a}}'> Chart will be rendered here </div>
+              		<a href='../{{a}}'><span class="tab_link">Ver más info</span></a>
+          		</div>
+            {% endfor %}              	      	
+			</div>
+		<!--/div-->
+	{%endblock%}
+
+
+{%endblock%}

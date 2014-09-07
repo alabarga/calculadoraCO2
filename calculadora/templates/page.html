@@ -1,0 +1,18 @@
+{% extends "template.html" %}
+
+{% block menu %}
+
+				<li class="{% if page == 'home' %}active_tab {% endif %} i_32_dashboard">
+					<a href="/" title="General Info">
+						<span class="tab_label">Introducción</span>
+						<span class="tab_info">Evolución</span>
+					</a>
+				</li>
+				<li class="{% if page == 'charts' %}active_tab {% endif %} i_32_charts">
+					<a href="/1/historico/" title="Visual Data">
+						<span class="tab_label">Ayuda</span>
+						<span class="tab_info">La calculadora</span>
+					</a>
+				</li>
+
+{%endblock%}

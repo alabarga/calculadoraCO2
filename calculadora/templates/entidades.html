@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{%block main_content %}
+
+{%block main_header %}Entidades{%endblock%}
+{%block sub_header %}{%endblock%}
+
+{% block content_1 %}
+
+    {% for entidad in entidades %}    
+    <div class="g_12 separator"><span></span></div>
+    <div class="g_12 contents_header">
+    <h3 class="i_16_dashboard tab_label">{{entidad.nombre}}</h3>
+    <!--div><span class="label">Listado de entidades</span></div-->
+    </div>
+
+    <a href="/{{entidad.id}}">
+    {% include "quick_stats.html" %}
+    </a>
+    {% endfor %}
+
+    {% endblock %}    
+    
+    <div class="g_12 separator"><span></span></div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{%block main_content %}
+	{%block main_header %}Información{%endblock%}
+	{%block sub_header %}Locales y vehículos{%endblock%}
+
+	{%block content_1 %}
+			<div class="g_12">
+				<div class="widget_header wwOptions">
+					<h4 class="widget_header_title wwIcon i_16_data">Locales</h4>
+				</div>
+				<div class="widget_contents noPadding">
+					<table class="datatable tables">
+						<thead>
+							<tr>
+								<th>{{tipo}}</th>
+								<th>Enero</th>
+								<th>Febrero</th>
+								<th>Marzo</th>
+								<th>Abril</th>
+								<th>Mayo</th>
+								<th>Junio</th>
+								<th>Julio</th>
+								<th>Agosto</th>
+								<th>Septiembre</th>
+								<th>Octubre</th>
+								<th>Noviembre</th>
+								<th>Diciembre</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in total %}
+							<tr>
+								<td>{{row.Row}}</td>
+								<td>{{row.Ene}}</td>
+								<td>{{row.Feb}}</td>
+								<td>{{row.Mar}}</td>
+								<td>{{row.Abr}}</td>
+								<td>{{row.May}}</td>
+								<td>{{row.Jun}}</td>
+								<td>{{row.Jul}}</td>
+								<td>{{row.Ago}}</td>
+								<td>{{row.Sep}}</td>
+								<td>{{row.Oct}}</td>
+								<td>{{row.Nov}}</td>
+								<td>{{row.Dic}}</td>
+							</tr>
+							{% endfor%}
+						</tbody>
+					</table>
+				</div>
+			</div>				
+	{%endblock%}    
+
+{%endblock%}

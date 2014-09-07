@@ -1,0 +1,35 @@
+{% extends "template.html" %}
+
+{% block menu %}
+				<li class="{% if page == 'home' %}active_tab {% endif %} i_32_dashboard">
+					<a href="/1/" title="General Info">
+						<span class="tab_label">Principal</span>
+						<span class="tab_info">Evolución</span>
+					</a>
+				</li>
+				<li class="{% if page == 'charts' %}active_tab {% endif %} i_32_charts">
+					<a href="/1/historico/" title="Visual Data">
+						<span class="tab_label">Histórico</span>
+						<span class="tab_info">Gráficos anuales</span>
+					</a>
+				</li>
+				<li class="i_32_home {% if page == 'locales' %}active_tab {% endif %}">
+					<a href="/1/info/locales/" title="Información">
+						<span class="tab_label">Locales</span>
+						<span class="tab_info"></span>
+					</a>
+				</li>
+				<li class="i_32_camion {% if page == 'vehiculos' %}active_tab {% endif %}">
+					<a href="/1/info/vehiculos/" title="Información">
+						<span class="tab_label">Vehículos</span>
+						<span class="tab_info"></span>
+					</a>
+				</li>
+				<li class="{% if page == 'consumos' %}active_tab {% endif %} i_32_forms">
+					<a href="/1/consumos/" title="Some Fields">
+						<span class="tab_label">Consumos</span>
+						<span class="tab_info">Registrar datos</span>
+					</a>
+				</li>                
+{% endblock %}
+

@@ -1,0 +1,27 @@
+
+
+<!-- Quick Statistics -->
+<div class="g_3 quick_stats">
+    <div class="big_stats visitor_stats">
+        {{entidad.ultimos_consumos|floatformat:2}} Tn
+    </div>
+    <h5 class="stats_info">Emisiones CO2</h5>
+</div>
+<div class="g_3 quick_stats">
+    <div class="big_stats tickets_stats">
+         {{entidad.reduccion_consumo|floatformat:2}}%
+    </div>
+    <h5 class="stats_info">Reducción</h5>
+</div>
+<div class="g_3 quick_stats">
+    <div class="big_stats users_stats">
+        {{entidad.locales.count}}
+    </div>
+    <h5 class="stats_info">Locales</h5>
+</div>
+<div class="g_3 quick_stats">
+    <div class="big_stats orders_stats">
+        {{entidad.vehiculos.count}}
+    </div>
+    <h5 class="stats_info">Vehículos</h5>
+</div>

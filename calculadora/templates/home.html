@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block chart_loader_header %}
+{% load chartit %}
+{{ charts|load_charts:"acumulado,comparacion" }}
+{% endblock %}
+
+{%block main_content %}
+    {%block main_header %}Calculadora CO2{%endblock%}
+    {%block sub_header %}Acumulado anual{%endblock%}
+
+    {%block content_1 %}
+    {% include "quick_stats.html" %}
+    {%endblock%}
+
+            {%block content_2 %}
+
+                <!-- Charts -->
+                <div class="g_12">
+                    <div class="widget_header">
+                        <h4 class="widget_header_title wwIcon i_16_charts">Acumulado a lo largo del año</h4>
+                    </div>
+                    <div class="widget_contents">
+                        <div id='acumulado'> Chart will be rendered here </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="g_12">
+                    <div class="widget_header">
+                        <h4 class="widget_header_title wwIcon i_16_charts">Comparación con el año anterior</h4>
+                    </div>
+                    <div class="widget_contents">
+                        <div id='comparacion'> Chart will be rendered here </div>
+                    </div>
+                </div>
+
+            {%endblock%}
+
+            {%block content_3 %}
+
+                <div class="g_12">
+                    <div class="widget_header wwOptions">
+                        <h4 class="widget_header_title wwIcon i_16_data">Ultimos consumos</h4>
+                        <!--div class="w_Options i_16_tabs">
+                            <ul class="drop_menu menu_with_icons right_direction">
+                                <li>
+                                    <a class="i_16_files" title="CSV" >
+                                        <span class="label">CSV</span>
+                                        <div style="position: absolute; left: 0px; top: 0px; width: 96px; height: 28px; z-index: 99; "><embed id="ZeroClipboard_TableToolsMovie_1" src="/static/swf/copy_csv_xls_pdf.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="96" height="28" name="ZeroClipboard_TableToolsMovie_1" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=46&amp;height=28" wmode="transparent"></div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="i_16_files" title="XLS" >
+                                    <span class="label">XLS</span>  
+                                        <div style="position: absolute; left: 0px; top: 0px; width: 96px; height: 28px; z-index: 99; "><embed id="ZeroClipboard_TableToolsMovie_2" src="/static/swf/copy_csv_xls_pdf.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="96" height="28" name="ZeroClipboard_TableToolsMovie_2" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=2&amp;width=52&amp;height=28" wmode="transparent"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div-->
+                    </div>
+
+                    <div class="widget_contents noPadding">
+                        <table class="datatable tables" id="datos">
+                            <thead>
+                                <tr>
+                                    <th>Año</th>
+                                    <th>Mes</th>
+                                    <th>Consumo</th>
+                                    <th>Valor</th>
+                                    <th>CO2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in consumos %}
+                                <tr>
+                                    <td>{{c.ano}}</td>
+                                    <td>{{c.mes}}</td>
+                                    <td>{{c.medida}}</td>
+                                    <td>{{c.valor}}</td>
+                                    <td>{{c.co2}}</td>
+                                </tr>
+                                {% endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href='csv/'><span class="tab_link">Exportar csv</span></a>
+                </div>
+
+            {%endblock%}
+{%endblock%}

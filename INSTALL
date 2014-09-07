@@ -1,0 +1,344 @@
+virtualenv --distribute --no-site-packages env
+source env/bin/activate
+
+easy_install -U distribute
+pip install django==1.4.1
+pip install south
+pip install django-registration
+pip install django-grappelli
+pip install django-pagination
+pip install django-uni-form
+pip install mysql-python
+pip install django-pdf
+
+# http://stackoverflow.com/questions/762292/matplotlib-build-problem-error-c1083-cannot-open-include-file-ft2build-h
+
+# http://pyvttbl.googlecode.com/hg/doc/_build/html/quick-start.html
+
+sudo apt-get install swig
+pip install pyvttbl
+pip install numpy
+pip install matplotlib
+pip install scipy
+
+# sudo apt-get install python-numpy python-scipy python-matplotlib
+
+django-smart-selects: https://github.com/digi604/django-smart-selects
+http://code.google.com/p/django-cart/source/browse/trunk/cart/models.py
+
+django-admin.py startproject calculadora
+manage.py startapp co2
+
+MySQL
+easy_install -U distribute
+pip install MySQL-python
+http://www.guia-ubuntu.com/index.php?title=MySQL
+
+Primeros pasos
+
+Settings
+
+import os, sys
+BASE_DIR
+Template dirs
+Add apps
+
+edit urls.py
+
+url(r'^grappelli/', include('grappelli.urls')),
+url(r'^$', 'portal.views.home', name='home'),
+
+edit views.py
+
+def home(request):
+    return render_to_response("co2/home.html", {})
+
+from django.contrib import admin
+from co2.models import * 
+
+admin.site.register(Unidad)
+
+vi /home/alabarga/Proyectos/BigFoot/app/env/local/lib/python2.7/site-packages/chartit/templatetags/chartit.py
+
+error with simplejson
+
+creating objects
+
+pip install django_chartit
+pip install django-qsstats-magic
+pip install python-dateutil
+
+=======================================================
+select t1.mes, Avg(t1.co2) co2, Sum(t2.co2) acumulado
+FROM
+(select mes, Sum(co2) co2 
+from co2_consumo
+WHERE ano = 2011
+GROUP BY mes) t1
+INNER JOIN
+(select mes, Sum(co2) co2
+from co2_consumo
+WHERE ano = 2011
+GROUP BY mes) t2
+ON t2.mes <= t1.mes
+GROUP BY t1.mes
+
+
+import data
+=======================================================
+
+# Full path to your django project directory
+your_djangoproject_home="/home/mitch/projects/wantbox.com/wantbox/"
+
+import sys,os
+sys.path.append(your_djangoproject_home)
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
+from co2.models import *
+import csv
+
+#Consumo.objects.filter(ano=2012).delete()
+
+# Full path and name to your csv file
+archivo ="/home/alabarga/Proyectos/BigFoot/energia.txt"
+archivo ="/home/alabarga/django/co2/datos/datos2012.csv"
+
+datareader = csv.reader(open(archivo), delimiter=',', quotechar='"')
+#headerline = datareader.next()
+for row in datareader:
+    print row
+    # ['2003', '11', 'gasoleo', 'litros', '5499', 'Sarasa', '217,148', '14,627']
+    # ['2012', '3', 'electricidad mix valle', '51.00', 'Basoa']
+    c = Consumo()
+    c.ano = row[0]
+    c.mes = row[1]
+    c.medida = Medida.objects.get(denominacion__iexact = row[2])
+    #recurso = Recurso.objects.get(denominacion__iexact = row[2])
+    #unidades = Unidad.objects.get(abreviatura = row[3])
+    #c.medida = Medida.objects.get(recurso = recurso, unidades = unidades)
+    c.entidad = Entidad.objects.get(pk=1)
+    c.content_type = ContentType.objects.get(model='Local')
+    c.object_id = Local.objects.get(denominacion__iexact = row[4]).id
+    try:
+        c.valor =  float(row[3].replace(',', '.'))
+    except ValueError:
+        c.valor =  0
+    c.save()
+        
+    #try:
+    #    c.co2 =  float(row[7].replace(',', '.'))
+    #except ValueError:
+    #    c.co2 =  0
+    #c.save()
+
+import data vehiculos
+==================================================
+
+#Consumo.objects.filter(ano=2012).delete()
+#Vehiculo.objects.all.delete()
+
+from co2.models import *
+import csv
+
+# Full path and name to your csv file
+archivo ="/home/alabarga/Proyectos/BigFoot/combustible.txt"
+archivo ="/home/alabarga/django/co2/datos/vehiculos.csv"
+datareader = csv.reader(open(archivo), delimiter=',', quotechar='"')
+headerline = datareader.next()
+
+Consumo.objects.filter(medida__id = 10).delete()
+
+vehiculos = []
+for row in datareader:
+    print row
+    vehiculos.append(row[4])
+
+e = Entidad.objects.get(pk=1)
+t = TipoVehiculo.objects.get(pk=1)
+for v in list(set(vehiculos)):
+    print v
+    vv = Vehiculo()
+    vv.denominacion = v
+    vv.descripcion = v
+    vv.entidad = e
+    vv.tipo = t
+    vv.save()
+
+#[2012,12,diesel vehiculos,3826.03,0295-FPK,25585]
+datareader = csv.reader(open(archivo), delimiter=',', quotechar='"')
+headerline = datareader.next()
+e = Entidad.objects.get(pk=1)
+ct = ContentType.objects.get(model='Vehiculo')
+
+for row in datareader:
+    print row
+    c = Consumo()
+    c.ano = row[0]
+    c.mes = row[1]
+    m = Medida.objects.get(denominacion__iexact = row[2])
+    try:
+        litros = float(row[3])
+    except ValueError:
+        litros =  0
+    v = Vehiculo.objects.get(denominacion__iexact = row[4]).id
+    c.entidad = e
+    c.content_type = ct
+    c.object_id = v
+    c.medida = m
+    c.valor =  litros 
+    c.save()
+
+generate data for vehiculos
+==============================================
+
+from co2.models import *
+import random, copy
+for ano in range(2005,2013):
+    for mes in range(1,13):
+        c = Consumo()        
+        c.ano = ano
+        c.mes = mes
+        c.entidad = Entidad.objects.get(pk=1)
+
+        c.medida = Medida.objects.get(recurso = recurso, unidades = unidades)
+        c.valor = random.randint(10,80)
+        c.co2 = c.valor
+        c.content_type = ContentType.objects.get(model='Vehiculo')
+        c.object_id = 1
+        c.pk = None
+        c.save()
+    
+
+
+=======================================================
+Sarasa
+Artika
+Gaiarre
+Lizarra Yerri
+Lizarra Mercatondoa
+Belzunce
+Basoa
+Triki traku
+
+ano = '2011'
+dataSource = Consumo.objects.filter(ano = int(ano), entidad__id=1, content_type=16).order_by('mes')
+
+datos = PivotDataPool(
+      series= [
+       {'options':{
+          'source': dataSource,
+          'categories': ['mes','object_id'],
+          'legend_by': 'medida__recurso__denominacion'},
+        'terms': {
+          'consumo':Sum('co2'),
+        }}],
+      sortf_mapf_mts = (ordenar , monthname, True))
+
+ss = datos.series["consumo"]["_cv_lv_dfv"]
+
+for l in Local.objects.values_list('id',flat=True):
+    for i in range(1,13):
+        print ss[(str(i),str(l))]
+
+from pyvttbl import DataFrame
+df = DataFrame()
+df.read_tbl('export.csv',delimiter='\t')
+print(df)
+pt = df.pivot("Valor", ['Local/Vehiculo','Consumo'], ['Mes'])
+
+
+reload data vehiculos
+==================================================
+
+from co2.models import *
+import csv
+
+# Full path and name to your csv file
+archivo ="/home/alabarga/django/co2/datos/vehiculos.csv"
+datareader = csv.reader(open(archivo), delimiter=',', quotechar='"')
+headerline = datareader.next()
+
+Consumo.objects.filter(medida__id = 10).delete()
+
+e = Entidad.objects.get(pk=1)
+ct = ContentType.objects.get(model='Vehiculo')
+
+for row in datareader:
+    print row
+    for mes in range(1,13):
+        c = Consumo()
+        c.ano = row[0]
+        c.mes = mes
+        m = Medida.objects.get(denominacion__iexact = row[2])
+        try:
+            litros = float(row[3]) / 12
+        except ValueError:
+            litros =  0
+        v = Vehiculo.objects.get(denominacion__iexact = row[4]).id
+        c.entidad = e
+        c.content_type = ct
+        c.object_id = v
+        c.medida = m    
+        c.valor =  litros 
+        c.save()
+
+carga datos 2013
+==================================================
+
+from co2.models import *
+import csv
+
+e = Entidad.objects.get(pk=1)
+ct = ContentType.objects.get(model='Local')
+
+# Full path and name to your csv file
+archivo ="/home/alabarga/django/co2/datos/datos2013.csv"
+datareader = csv.reader(open(archivo), delimiter=',', quotechar='"')
+for row in datareader:
+    print row
+    # ['2003', '11', 'gasoleo', 'litros', '5499', 'Sarasa', '217,148', '14,627']
+    # ['2012', '3', 'electricidad mix valle', '51.00', 'Basoa']
+    # ['2013', '11', 'electricidad mix valle', '32', 'Berriozar']
+    c = Consumo()
+    c.ano = row[0]
+    c.mes = row[1]
+    c.medida = Medida.objects.get(denominacion__iexact = row[2])
+    c.entidad = e
+    c.content_type = ct
+    c.object_id = Local.objects.get(denominacion__iexact = row[4]).id
+    try:
+        c.valor =  float(row[3])
+    except ValueError:
+        c.valor =  0
+    c.save()
+
+vehiculos 2013
+==================================================
+from django.core.exceptions import ObjectDoesNotExist
+from co2.models import *
+import csv
+
+# Full path and name to your csv file
+archivo ="/home/alabarga/django/co2/datos/vehiculos2013.csv"
+datareader = csv.reader(open(archivo), delimiter=',', quotechar='"')
+headerline = datareader.next()
+e = Entidad.objects.get(pk=1)
+ct = ContentType.objects.get(model='Vehiculo')
+for row in datareader:
+    print row
+    v = Vehiculo.objects.get(denominacion__iexact = row[0]).id
+    for mes in range(1,13):
+        c = Consumo()
+        c.ano = 2013
+        c.mes = mes
+        m = Medida.objects.get(id=10)
+        try:
+            litros = float(row[1]) / 12
+        except ValueError:
+            litros =  0
+        c.entidad = e
+        c.content_type = ct
+        c.object_id = v
+        c.medida = m    
+        c.valor =  litros 
+        c.save()    
