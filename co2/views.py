@@ -27,6 +27,12 @@ import csv
 from pyvttbl import DataFrame
 from django.db.models import Max, Sum, Avg
 
+
+def entidades(request):
+    entidades = Entidad.objects.all()
+
+    return render_to_response("entidades.html", {"entidades":entidades})    
+
 def get_year():
     a = Consumo.objects.all().aggregate(year=Max('ano'))
     return a['year']
@@ -578,10 +584,9 @@ def export_csv(request, entidad=1, ano=None):
 def export_csv_pivot(request, entidad=1, ano=str(date.today().year)):
 
     consumos = Consumo.objects.filter(entidad__pk=entidad, ano=ano)
-
     
     from collections import namedtuple
-    LineaDetalle = namedtuple('LineaDetalle',["Ano", "Mes", 'Local_o_Vehiculo', "Consumo", "Valor"])
+    LineaDetalle = namedtuple('LineaDetalle',[u'Año', "Mes", 'Local_o_Vehiculo', "Consumo", "Valor"])
 
     df = DataFrame()    
     
@@ -592,7 +597,7 @@ def export_csv_pivot(request, entidad=1, ano=str(date.today().year)):
         else:
             denominacion = Vehiculo.objects.get(pk=c.object_id).denominacion
 
-        df.insert(LineaDetalle(c.ano, c.mes, denominacion, c.medida.denominacion, c.valor)._asdict())
+        df.insert(LineaDetalle(c.ano, c.mes, denominacion.encode("utf-8"), c.medida.denominacion.encode("utf-8"), c.valor)._asdict())
 
     pt = df.pivot("Valor", ['Local_o_Vehiculo','Consumo'], ['Mes'])
 
@@ -629,7 +634,3 @@ def informe_anual(request,entidad,ano):
     return render_to_response("informe.html", {"page":"informes","total":total,"tipo":"Recurso"}, context_instance=RequestContext(request))
 
 
-def entidades(request):
-    entidades = Entidad.objects.all()
-
-    return render_to_response("entidades.html", {"entidades":entidades})    
